@@ -36,5 +36,10 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
+<<<<<<< HEAD
         
+=======
+
+print('a')
+>>>>>>> 2d68fd8232adcc5f6d9208b83bfd560122196910
 
