@@ -8,17 +8,21 @@ class Solution:
         if not nums:
             return False
         left, right = 0, len(nums)-1
-        while left <=right:
+        while left <= right:
             mid = (left+right)//2
-            if nums[mid]==target:
+            if nums[mid] == target:
                 return True
-            elif nums[left]<=target<nums[mid] or \
-                (nums[mid]<=nums[left] and (target<nums[mid] or nums[left]<=target)):
-                right = mid-1
-            elif nums[mid]<=target<nums[right] or \
-                (nums[mid]>=nums[right] and (target>nums[mid] or target<=nums[right] )):
-                left = mid+1
+            if nums[mid] > nums[left]:
+                if nums[left]<=target<nums[mid]:
+                    right = mid -1
+                else:
+                    left = mid + 1
+            elif nums[mid] < nums[left]:
+                if nums[mid]<target<=nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid -1
             else:
-                return False
-        
+                left += 1
+        return False
 
