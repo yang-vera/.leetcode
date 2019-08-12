@@ -30,12 +30,9 @@
 #
 class Solution(object):
     def trap(self, height):
-        """
-        :type height: List[int]
-        :rtype: int
-        """
         if not height or len(height) < 3:
             return 0
+        '''
         left, right = 0, len(height)-1
         lmax, rmax = height[left], height[right]
         vol = 0
@@ -49,7 +46,21 @@ class Solution(object):
                 rmax = max(rmax, height[right])
                 vol+=rmax-height[right]
         return vol
-            
-        
-        
+        '''
+        stack = []
+        i = 0
+        vol=0
+        while i < len(height):
+            if (not stack) or (height[i]<height[stack[-1]]):
+                stack.append(i)
+                i+=1
+            else:
+                last = stack.pop()
+                if not stack:
+                    continue
+                vol+= (min(height[i], height[stack[-1]])-height[last])*(i-1-stack[-1]) 
+        return vol
 
+print(Solution().trap([0,1,0,2,1,0,1,3,2,1,2,1]))
+
+        
