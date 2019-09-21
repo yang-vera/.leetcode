@@ -43,5 +43,18 @@ class Solution(object):
         :type height: List[int]
         :rtype: int
         """
-        
+        res, max_res = 0, 0
+
+        left, right = 0, len(height)-1
+        while left < right:
+            if height[left] < height[right]:
+                res = height[left]*(right-left)
+                max_res = max(res, max_res)
+                left+=1
+            else:
+                res = height[right]*(right-left)
+                max_res = max(res, max_res)
+                right-=1
+        return max_res                
+
 
