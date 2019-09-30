@@ -50,6 +50,7 @@ class Solution(object):
         slow = fast = head
         for i in range(n):
             fast=fast.next
+        # assuming n is always valid so n is at most length of list
         if not fast:
             return head.next
         while fast.next:

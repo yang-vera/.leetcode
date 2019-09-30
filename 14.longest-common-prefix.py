@@ -55,11 +55,9 @@ class Solution(object):
             for j in range(1, size_str):
                 if i >= len(strs[j]):
                     different = True
-                if different:
                     break
                 if strs[j][i] != char:
                     different = True
-                if different:
                     break
             if different:
                 break

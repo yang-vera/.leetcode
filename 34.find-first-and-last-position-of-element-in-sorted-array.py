@@ -41,36 +41,28 @@ class Solution(object):
         :rtype: List[int]
         """
         left, right = 0, len(nums)-1
-        while left <= right:
-            mid = (left+right)//2
-            if nums[mid] > target:
-                right = mid - 1
-            elif nums[mid] < target:
-                left = mid + 1 
-            else:
-                return [self.target_left(nums, left, right, target), self.target_right(nums, left, right, target)]
-        return [-1, -1]
+        # 找左边界 相等也要 right = mid-1 最后左边界是有效的left
+        # 找右边界 相等也要往右 left = mid+1 最后右边界是right
 
-    
-    def target_left(self, nums, start, end, target):
-        while start <= end:
-            mid = (start+end)//2
-            if nums[mid] < target:
-                start = mid + 1
+        while left<=right:
+            mid = (left+right)//2
+            if nums[mid]<target:
+                left = mid+1
             else:
-                if mid == 0 or target > nums[mid-1]: 
-                    return mid
-                else: 
-                    end = mid - 1
-    
-    def target_right(self, nums, start, end, target):
-        while start <= end:
-            mid = (start+end)//2
-            if nums[mid] > target:
-                end = mid - 1
+                right = mid-1
+        # 是否有效
+        if left == len(nums) or nums[left]!=target:
+            return [-1, -1]
+        right = len(nums)-1
+        res = [None]*2
+        res[0] = left
+        while left<=right:
+            mid = (left+right)//2
+            if nums[mid]>target:
+                right = mid-1
             else:
-                if mid == len(nums)-1 or target < nums[mid+1]: 
-                    return mid
-                else: 
-                    start = mid + 1
+                left = mid +1
+        res[1]=right
+        return res
+
     

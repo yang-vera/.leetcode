@@ -48,6 +48,9 @@
 # 
 # 
 #
+
+# 普通的二分法 输出left即可
+
 class Solution(object):
     def searchInsert(self, nums, target):
         """
