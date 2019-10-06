@@ -42,18 +42,20 @@ class Solution(object):
         """
         if len(nums)<=1:
             return 0
-        nstep = 1
         step_min = 1
-        step_max = 0 + nums[0]
-        while step_min<=step_max:
-            if step_max >= len(nums)-1:
+        step_max = nums[0]
+        nstep = 1
+        while step_min <=step_max:
+            if step_max >=len(nums)-1:
                 return nstep
             else:
-                nstep+=1
+                nstep+=1 #update the nstep
                 last_max = step_max
-                for i in range(step_min, step_max+1):
-                    step_max = max(i + nums[i], step_max)
-                step_min = last_max + 1
+                for i in range(step_min, last_max+1):
+                    step_max=max(i+nums[i], step_max)
+                step_min=last_max+1
+            
+
 
 
         

@@ -1,12 +1,4 @@
 #
-<<<<<<< HEAD
-# @lc app=leetcode id=56 lang=python3
-#
-# [56] Merge Intervals
-#
-class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-=======
 # @lc app=leetcode id=56 lang=python
 #
 # [56] Merge Intervals
@@ -43,23 +35,31 @@ class Solution:
 # default code definition to get new method signature.
 # 
 #
+
+# @lc code=start
 class Solution(object):
     def merge(self, intervals):
         """
         :type intervals: List[List[int]]
         :rtype: List[List[int]]
         """
-        intervals.sort(key=lambda x:x[0])
+        if len(intervals)<=1:
+            return intervals
+        intervals.sort(key = lambda x:x[0])
         i = 1
-        while i<len(intervals):
-            if intervals[i][0]<=intervals[i-1][1]:
-                intervals[i-1][1] = max(intervals[i-1][1], intervals[i][1])
+        while 1:
+            if intervals[i][0] <= intervals[i-1][1]:
+                if intervals[i][1]>intervals[i-1][1]:
+                    intervals[i-1][1] = intervals[i][1]
                 del intervals[i]
             else:
                 i+=1
-        return intervals
+            if i == len(intervals):
+                return intervals
 
 
->>>>>>> 2d68fd8232adcc5f6d9208b83bfd560122196910
+
+
         
+# @lc code=end
 
