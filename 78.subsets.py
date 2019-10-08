@@ -54,7 +54,9 @@ class Solution(object):
         self.getsubset(nums, index+1, path, res)
 
         #include nums[index]
-        self.getsubset(nums, index+1, path+[nums[index]], res)
+        path.append(nums[index])
+        self.getsubset(nums, index+1, path, res)
+        path.pop()
 
 
 

@@ -49,12 +49,23 @@ class Solution(object):
         last_index = len(nums)-1
         if len(nums)<=1:
             return True
+        '''    
         last_index = len(nums)-1
         for i in range(len(nums)-2, -1, -1):
-            if i + nums[i] >= last_index:
+            if nums[i]+i >=last_index:
                 last_index = i
+        
         if last_index == 0:
             return True
         else:
-            return False 
+            return False
+        '''
+        max_step = 0
+        for i in range(len(nums)-1):
+            if nums[i]==0 and max_step<=i:
+                return False
+            max_step = max(max_step, nums[i]+i)
+        return True
+
+
 

@@ -51,7 +51,7 @@ class Solution(object):
         i = 0
         vol=0
         while i < len(height):
-            if (not stack) or (height[i]<height[stack[-1]]):
+            if (not stack) or (height[i]<=height[stack[-1]]):
                 stack.append(i)
                 i+=1
             else:
@@ -61,6 +61,5 @@ class Solution(object):
                 vol+= (min(height[i], height[stack[-1]])-height[last])*(i-1-stack[-1]) 
         return vol
 
-print(Solution().trap([0,1,0,2,1,0,1,3,2,1,2,1]))
 
         

@@ -49,6 +49,7 @@ class Solution(object):
         """
         length = len(nums)
         for i in range(length):
+            # zy: nums[i]!=nums[nums[i]-1]
             while 0 < nums[i]<= length and nums[i]!=nums[nums[i]-1]:
                 temp = nums[i] - 1
                 nums[i], nums[temp] = nums[temp], nums[i]

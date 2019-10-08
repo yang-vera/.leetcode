@@ -59,18 +59,25 @@ class Solution(object):
         :rtype: List[List[int]]
         """
         res = []
+        start = 0
         candidates.sort()
-        self.dfs(candidates, target, 0, [], res)
+        self.getResult(candidates, target, start, res, [])
         return res
-    
-    def dfs(self, nums, target, index, path, res):
-        if target < 0:
-            return 
-        if target == 0:
-            res.append(path)
-            return 
-        for i in range(index, len(nums)):
-            if i > index and nums[i] == nums[i-1]:
-                continue
-            self.dfs(nums, target-nums[i], i+1, path+[nums[i]], res)
 
+    def getResult(self, candidates, target, start, res, rec_res):
+        if target < 0:
+            return
+        elif target == 0:
+            ## list( ) necessary I think append just append the pointer to the parameter list
+            ## or the rec_res will be all empty [] at last
+            res.append(list(rec_res))
+            return
+        for i in range(start, len(candidates)):
+            # i > start
+            if i > start and candidates[i]==candidates[i-1]:
+                continue
+            rec_res.append(candidates[i])
+            self.getResult(candidates, target-candidates[i], i+1, res, rec_res)
+            rec_res.pop()
+
+ 

@@ -46,23 +46,28 @@ class Solution(object):
         :type target: int
         :rtype: int
         """
-        if not nums:
-            return -1
-        left, right = 0, len(nums)-1
-        while left <=right:
-            mid = (left + right)//2
+        # get the mid num. judge if target is in the sorted part
+        # if in, drop the other part
+        # if not in, drop this part
+        left = 0
+        right = len(nums)-1
+        while left <= right:
+            mid = (left+right)//2
             if nums[mid] == target:
                 return mid
-            if (nums[left] <= target < nums[mid]) or \
-                ((nums[mid] < nums[left]) and (target >= nums[left] or target < nums[mid])):
-                right = mid - 1
-                continue
-            if (nums[mid]< target <= nums[right]) or \
-                ((nums[mid] > nums[right]) and (target > nums[mid] or target <= nums[right])):
-                left = mid + 1
-                continue
-            return -1
-        
+            #left is sorted
+            if nums[left]<=nums[mid]:
+                #target in this part
+                if nums[left]<=target and nums[mid]>target:
+                    right = mid-1
+                else:
+                    left = mid+1
+            else: # right is sorted
+                if nums[mid] < target and nums[right]>=target:
+                    left = mid+1
+                else:
+                    right = mid-1
+        return -1
 
 
 
