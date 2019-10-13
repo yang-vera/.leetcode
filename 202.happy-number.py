@@ -39,5 +39,20 @@ class Solution(object):
         :type n: int
         :rtype: bool
         """
-        
+        visit = set()
+        sum = 0
+        if n == 0:
+            return False
+        while n != 1:
+            sum = 0
+            while n > 0:
+                num = n % 10
+                n = n // 10
+                sum+= (num*num)
+            if sum in visit:
+                return False
+            else:
+                visit.add(sum)
+            n = sum
+        return True
 
