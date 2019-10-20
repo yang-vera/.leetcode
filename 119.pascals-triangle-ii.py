@@ -40,20 +40,18 @@ class Solution(object):
         :type rowIndex: int
         :rtype: List[int]
         """
-        if rowIndex<=1:
+        if rowIndex <= 1:
             if rowIndex == 0:
                 return [1]
             else:
                 return [1,1]
-        else:
-            ret = [1]*(rowIndex+1)
-            temp = [None]*(rowIndex-1)
-            for i in range(2, rowIndex+1):
-                temp[:(i-1)] = ret[0:(i-1)]
-                for j in range(1, i):
-                    ret[j] += temp[j-1]
-                    
-            return ret
+        ret = [1]*(1+rowIndex)
+        temp = [None]*(rowIndex-1)
+        for i in range(2, rowIndex+1):
+            temp[0:i-1] = ret[0:i-1]
+            for j in range(1, i):
+                ret[j]+=temp[j-1]
+        return ret
 
 
         
