@@ -9,7 +9,7 @@
  f[i][j] is if the string between i th and j th is palindromic
  f[i][j] = true if i == j
          = S[i] == S[j] if j == i + 1
-         = S[i] == S[j] && f[i+1][j11] if j > i+1
+         = S[i] == S[j] && f[i+1][j-1] if j > i+1
 '''
 
 class Solution:

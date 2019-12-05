@@ -33,7 +33,7 @@
 # 
 # 
 #
-#zy: dynamic programming
+#zy: dynamic programming  dp [ i ] 代表以下标 i 结尾的合法序列的最长长度
 class Solution(object):
     def longestValidParentheses(self, s):
         """
