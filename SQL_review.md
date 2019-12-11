@@ -872,8 +872,254 @@ JOIN accounts a
 ON w.account_id = a.id
 JOIN sales_reps s
 ON s.id = a.sales_rep_id
-GROUP BY s.name, w.chabbel
+GROUP BY s.name, w.channel
 ORDER BY n_occurrence DESC;
 ```
 
 4. Determine the number of times a particular channel was used in the web_events table for each region. Your final table should have three columns - the region name, the channel, and the number of occurrences. Order your table with the highest number of occurrences first.
+```sql
+SELECT r.name, w.channel, COUNT(*) n_occurrence
+FROM web_events w
+JOIN accounts a
+ON w.account_id = a.id
+JOIN sales_reps s
+ON s.id = a.sales_rep_id
+JOIN region r
+ON r.id = s.region_id
+GROUP BY r.name, w.channel
+ORDER BY n_occurrence DESC;
+```
+
+
+## DISTINCT
+**DISTINCT** is always used in SELECT statements, and it provides the unique rows for all columns written in the SELECT statement. Therefore, you only use DISTINCT once in any particular SELECT statement.
+
+You could write:
+```sql
+SELECT DISTINCT column1, column2, column3
+FROM table1;
+```
+It’s worth noting that using **DISTINCT**, particularly in aggregations, can **slow your queries down** quite a bit.
+
+#### Example
+1. Use DISTINCT to test if there are any accounts associated with more than one region.
+
+```sql
+SELECT DISTINCT id, name
+FROM accounts;
+```
+
+```sql
+SELECT r.id region_id, r.name region_name,
+a.id account_id, a.name account_name
+FROM accounts a
+JOIN sales_reps s
+ON a.sales_rep_id = s.id
+JOIN region r
+ON s.region_id = r.id;
+```
+
+
+2. Have any sales reps worked on more than one account?
+```sql
+SELECT s.name, s.id, COUNT(*) accounts
+FROM sales_reps s
+JOIN accounts a
+ON s.id = a.sales_rep_id
+GROUP BY s.name, s.id;
+```
+
+## HAVING
+
+**HAVING** is the “clean” way to filter a query that has been aggregated, but this is also commonly done using a subquery. Essentially, any time you want to perform a **WHERE** on an element of your query that was created by an aggregate, you need to use HAVING instead.
+
+**Having** cols must appear in the **GROUP BY** clause or be used in an aggregate function
+
+
+#### Example
+
+1. How many of the sales reps have more than 5 accounts that they manage?
+
+```sql
+SELECT s.id, COUNT(a.id) n_accounts
+FROM accounts a
+JOIN sales_reps s
+ON a.sales_rep_id = s.id
+GROUP BY s.id
+HAVING COUNT(a.id)>5;
+```
+
+2. How many accounts have more than 20 orders?
+```sql
+SELECT COUNT(o.id) n_order
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id
+HAVING COUNT(o.id) > 20;
+```
+
+3. Which account has the most orders?
+```sql
+SELECT a.id, a.name, COUNT(o.id) n_order
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id, a.name
+ORDER BY n_order DESC
+LIMIT 1;
+```
+
+4. Which accounts spent more than 30,000 usd total across all orders?
+```sql
+SELECT a.id, a.name
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id, a.name
+HAVING SUM(total_amt_usd) > 30000;
+```
+
+5. Which accounts spent less than 1,000 usd total across all orders?
+
+```sql
+SELECT a.id, a.name
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id, a.name
+HAVING SUM(total_amt_usd) < 1000;
+```
+
+6. Which account has spent the most with us?
+
+```sql
+SELECT a.id, a.name, SUM(o.total_amt_usd) total_usd
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id, a.name
+ORDER BY total_usd DESC
+LIMIT 1;
+```
+
+7. Which account has spent the least with us?
+
+```sql
+SELECT a.id, a.name, SUM(o.total_amt_usd) total_usd
+FROM accounts a
+JOIN orders o
+ON a.id = o.account_id
+GROUP BY a.id, a.name
+ORDER BY total_usd
+LIMIT 1;
+```
+
+8. Which accounts used facebook as a channel to contact customers more than 6 times?
+
+```sql
+SELECT a.name, a.id
+FROM accounts a
+JOIN web_events w
+ON w.account_id = a.id
+GROUP BY a.id, a.name, w.channel
+HAVING COUNT(w.occurred_at) > 6 AND w.channel = 'facebook';
+```
+
+9. Which account used facebook most as a channel?
+```sql
+SELECT a.name, a.id, COUNT(w.occurred_at) number_channel
+FROM accounts a
+JOIN web_events w
+ON w.account_id = a.id
+WHERE w.channel = 'facebook'
+GROUP BY a.id, a.name
+ORDER BY number_channel DESC
+LIMIT 1;
+```
+
+10. Which channel was most frequently used by most accounts?
+
+```sql
+SELECT a.name, a.id, w.channel, COUNT(w.occurred_at) number_channel
+FROM accounts a
+JOIN web_events w
+ON w.account_id = a.id
+GROUP BY a.id, a.name, w.channel
+ORDER BY number_channel DESC
+LIMIT 10;
+```
+
+## DATE
+
+**GROUPing BY** a date column is not usually very useful in SQL, as these columns tend to have transaction data down to a second.
+
+### DATE_TRUNC 
+allows you to truncate your date to a particular part of your date-time column. Common trunctions are day, month, and year. 
+
+
+### DATE_PART 
+can be useful for pulling a specific portion of a date, but notice pulling month or day of the week (dow) means that you are no longer keeping the years in order. Rather you are grouping for certain components regardless of which year they belonged in.
+
+You can reference the columns in your select statement in GROUP BY and ORDER BY clauses with numbers that follow the order they appear in the select statement. For example
+```sql
+SELECT standard_qty, COUNT(*)
+
+FROM orders
+
+GROUP BY 1 (this 1 refers to standard_qty since it is the first of the columns included in the select statement)
+
+ORDER BY 1 (this 1 refers to standard_qty since it is the first of the columns included in the select statement)
+```
+
+#### Example
+1. Find the sales in terms of total dollars for all orders in each year, ordered from greatest to least. Do you notice any trends in the yearly sales totals?
+
+```sql
+SELECT SUM(total_amt_usd) total_sales, DATE_PART('year', occurred_at) ord_year
+FROM orders
+GROUP BY ord_year
+ORDER BY total_sales DESC;
+```
+
+
+2. Which month did Parch & Posey have the greatest sales in terms of total dollars? Are all months evenly represented by the dataset?
+
+```sql
+SELECT SUM(total_amt_usd) total_sales, DATE_PART('month', occurred_at) ord_month
+FROM orders
+WHERE occurred_at BETWEEN '2014-01-01' AND '2017-01-01'
+GROUP BY ord_month
+ORDER BY total_sales DESC;
+```
+
+
+3. Which year did Parch & Posey have the greatest sales in terms of total number of orders? Are all years evenly represented by the dataset?
+
+```sql
+SELECT DATE_PART('year', occurred_at) ord_year, COUNT(*) n_order
+FROM orders
+GROUP BY ord_year
+ORDER BY 2 DESC
+```
+
+Which month did Parch & Posey have the greatest sales in terms of total number of orders? Are all months evenly represented by the dataset?
+```sql
+SELECT DATE_PART('month', occurred_at) ord_month, COUNT(*) n_order
+FROM orders
+WHERE occurred_at BETWEEN '2014-01-01' AND '2017-01-01'
+GROUP BY ord_month
+ORDER BY 2 DESC
+```
+
+In which month of which year did Walmart spend the most on gloss paper in terms of dollars?
+
+```sql
+SELECT DATE_TRUNC('month', o.occurred_at) month_year, SUM(o.gloss_amt_usd) total_gloss
+FROM orders o
+JOIN accounts a
+ON a.id = o.account_id
+WHERE a.name = 'Walmart'
+GROUP BY 1
+ORDER BY 2 DESC;
+```
