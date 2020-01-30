@@ -1123,3 +1123,277 @@ WHERE a.name = 'Walmart'
 GROUP BY 1
 ORDER BY 2 DESC;
 ```
+
+
+## CASE
+The CASE statement always goes in the SELECT clause.
+CASE must include the following components: **WHEN**, **THEN**, and **END**. **ELSE** is an optional component to catch cases that didn’t meet any of the other previous CASE conditions.
+
+You can make any conditional statement using any conditional operator (like WHERE) between WHEN and THEN. This includes stringing together multiple conditional statements using AND and OR.
+
+You can include multiple WHEN statements, as well as an ELSE statement again, to deal with any unaddressed conditions.
+
+#### Example
+Create a column that divides the standard_amt_usd by the standard_qty to find the unit price for standard paper for each order. Limit the results to the first 10 orders, and include the id and account_id fields
+
+```sql
+SELECT o.id, o.account_id, 
+CASE WHEN o.standard_qty = 0 or o.standard_qty IS NULL THEN 0
+ELSE o.standard_amt_usd/o.standard_qty END AS unit_price
+FROM orders o
+LIMIT 10;
+```
+
+## zy: do not forget **END**
+Getting the same information using a WHERE clause means only being able to get one set of data from the CASE at a time.
+
+
+#### Example
+
+1. Write a query to display for each order, the account ID, total amount of the order, and the level of the order - ‘Large’ or ’Small’ - depending on if the order is $3000 or more, or smaller than $3000.
+
+```sql
+SELECT account_id, total_amt_usd, total_amt_usd total,
+CASE WHEN total >= 3000 THEN 'Large' ELSE 'Small' END AS level
+FROM orders;
+```
+
+2. Write a query to display the number of orders in each of three categories, based on the total number of items in each order. The three categories are: 'At Least 2000', 'Between 1000 and 2000' and 'Less than 1000'.
+
+```sql
+SELECT CASE WHEN total >= 2000 THEN 'At Least 2000'
+            WHEN total < 2000 AND total >= 1000 THEN 'Between 1000 and 2000'
+            ELSE 'Less than 1000' END AS category, 
+        COUNT(*) order_count
+FROM orders
+GROUP BY 1;
+```
+
+3. We would like to understand 3 different levels of customers based on the amount associated with their purchases. The top level includes anyone with a Lifetime Value (total sales of all orders) greater than 200,000 usd. The second level is between 200,000 and 100,000 usd. The lowest level is anyone under 100,000 usd. Provide a table that includes the level associated with each account. You should provide the account name, the total sales of all orders for the customer, and the level. Order with the top spending customers listed first.
+
+```sql
+SELECT a.name, SUM(o.total_amt_usd) total_sales, 
+    CASE WHEN SUM(o.total_amt_usd)>200000 THEN 'top'
+         WHEN SUM(o.total_amt_usd)<=200000 AND SUM(o.total_amt_usd) > 100000 THEN 'Mid'
+         ELSE 'Bottom' END AS level
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+GROUP BY 1
+ORDER BY 2 DESC;
+```
+
+
+4. We would now like to perform a similar calculation to the first, but we want to obtain the total amount spent by customers only in 2016 and 2017. Keep the same levels as in the previous question. Order with the top spending customers listed first.
+```sql
+SELECT a.name, SUM(total_amt_usd) total_spent, 
+     CASE WHEN SUM(total_amt_usd) > 200000 THEN 'top'
+     WHEN  SUM(total_amt_usd) > 100000 THEN 'middle'
+     ELSE 'low' END AS customer_level
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+WHERE occurred_at > '2016-01-01' 
+GROUP BY 1
+ORDER BY 2 DESC;
+```
+
+5. We would like to identify top performing sales reps, which are sales reps associated with more than 200 orders. Create a table with the sales rep name, the total number of orders, and a column with top or not depending on if they have more than 200 orders. Place the top sales people first in your final table.
+
+```sql
+SELECT s.name, COUNT(*) order_count,
+    CASE WHEN COUNT(*) > 200 THEN 'TOP'
+         ELSE 'NOT TOP' END AS level
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+JOIN sales_reps s
+ON s.id = a.sales_rep_id
+GROUP BY 1
+ORDER BY 2 DESC;
+```
+
+6. The previous didn't account for the middle, nor the dollar amount associated with the sales. Management decides they want to see these characteristics represented as well. We would like to identify top performing sales reps, which are sales reps associated with more than 200 orders or more than 750000 in total sales. The middle group has any rep with more than 150 orders or 500000 in sales. Create a table with the sales rep name, the total number of orders, total sales across all orders, and a column with top, middle, or low depending on this criteria. Place the top sales people based on dollar amount of sales first in your final table. You might see a few upset sales people by this criteria!
+
+```sql
+SELECT s.name, COUNT(*) order_count, SUM(total_amt_usd) sales_sum,
+CASE WHEN COUNT(*) > 200 OR SUM(total_amt_usd)>750000 THEN 'top'
+     WHEN COUNT(*) > 150 OR SUM(total_amt_usd)>500000 THEN 'middle'
+     ELSE 'low' END AS LEVEL
+FROM orders o
+JOIN accounts a
+ON o.account_id = a.id
+JOIN sales_reps s
+ON s.id = a.sales_rep_id
+GROUP BY 1
+ORDER BY 3 DESC;  
+```
+
+# Subqueries and Temporary Tables
+
+#### Example
+1. We needed to group by the day and channel. Then ordering by the number of events (the third column) gave us a quick way to answer the first question.
+```sql
+SELECT DATE_TRUNC('day',occurred_at) AS day,
+   channel, COUNT(*) as events
+FROM web_events
+GROUP BY 1,2
+ORDER BY 3 DESC;
+```
+
+2. Here you can see that to get the entire table in question 1 back, we included an * in our SELECT statement. You will need to be sure to alias your table.
+
+```sql
+SELECT *
+FROM (SELECT DATE_TRUNC('day',occurred_at) AS day,
+           channel, COUNT(*) as events
+     FROM web_events 
+     GROUP BY 1,2
+     ORDER BY 3 DESC) sub;
+```
+
+3. Finally, here we are able to get a table that shows the average number of events a day for each channel.
+
+```sql
+SELECT channel, AVG(events) AS average_events
+FROM (SELECT DATE_TRUNC('day',occurred_at) AS day,
+             channel, COUNT(*) as events
+      FROM web_events 
+      GROUP BY 1,2) sub
+GROUP BY channel
+ORDER BY 2 DESC;
+```
+
+## Subquery Format
+### indenting the subquery in some way
+```sql
+SELECT *
+FROM (SELECT DATE_TRUNC('day',occurred_at) AS day,
+                channel, COUNT(*) as events
+      FROM web_events 
+      GROUP BY 1,2
+      ORDER BY 3 DESC) sub
+GROUP BY day, channel, events
+ORDER BY 2 DESC;
+```
+
+In the first subquery you wrote, you created a table that you could then query again in the FROM statement. However, if you are only returning a single value, you might use that value in a logical statement like **WHERE, HAVING, or even SELECT** - the value could be nested within a CASE statement.
+
+
+Expert Tip
+Note that you should **not include** an alias when you write a subquery in a conditional statement. This is because the subquery is treated as an individual value (or set of values in the IN case) rather than as a table.
+
+Also, notice the query here compared a single value. If we returned an entire column IN would need to be used to perform a logical argument. If we are returning an entire table, then we **must use an ALIAS for the table**, and perform additional logic on the entire table.
+
+#### Example
+
+1. The average amount of standard paper sold on the first month that any order was placed in the orders table (in terms of quantity).
+
+2. The average amount of gloss paper sold on the first month that any order was placed in the orders table (in terms of quantity).
+
+3. The average amount of poster paper sold on the first month that any order was placed in the orders table (in terms of quantity).
+
+4. The total amount spent on all orders on the first month that any order was placed in the orders table (in terms of usd).
+
+```sql
+SELECT DATE_TRUNC('month', MIN(occurred_at)) 
+FROM orders;
+```
+Then to pull the average for each, we could do this all in one query, but for readability, I provided two queries below to perform each separately.
+```sql
+SELECT AVG(standard_qty) avg_std, AVG(gloss_qty) avg_gls, AVG(poster_qty) avg_pst
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+     (SELECT DATE_TRUNC('month', MIN(occurred_at)) FROM orders);
+
+SELECT SUM(total_amt_usd)
+FROM orders
+WHERE DATE_TRUNC('month', occurred_at) = 
+      (SELECT DATE_TRUNC('month', MIN(occurred_at)) FROM orders);
+```
+
+
+5. Provide the name of the sales_rep in each region with the largest amount of total_amt_usd sales.
+```sql
+
+SELECT t3.rep_name, t3.region_name, t3.total_amt
+FROM(SELECT region_name, MAX(total_amt) total_amt
+     FROM(SELECT s.name rep_name, r.name region_name, SUM(o.total_amt_usd) total_amt
+             FROM sales_reps s
+             JOIN accounts a
+             ON a.sales_rep_id = s.id
+             JOIN orders o
+             ON o.account_id = a.id
+             JOIN region r
+             ON r.id = s.region_id
+             GROUP BY 1, 2) t1
+     GROUP BY 1) t2
+JOIN (SELECT s.name rep_name, r.name region_name, SUM(o.total_amt_usd) total_amt
+     FROM sales_reps s
+     JOIN accounts a
+     ON a.sales_rep_id = s.id
+     JOIN orders o
+     ON o.account_id = a.id
+     JOIN region r
+     ON r.id = s.region_id
+     GROUP BY 1,2
+     ORDER BY 3 DESC) t3
+ON t3.region_name = t2.region_name AND t3.total_amt = t2.total_amt;
+
+```
+
+
+6. For the region with the largest sales total_amt_usd, how many total orders were placed?
+
+    6.1 The first query I wrote was to pull the total_amt_usd for each region.
+
+```sql
+SELECT r.name retion_name, SUM(o.total_amt_usd) largest_usd
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+GROUP BY 1;
+```
+
+    6.2 Then we just want the region with the max amount from this table. There are two ways I considered getting this amount. One was to pull the max using a subquery. Another way is to order descending and just pull the top value.
+
+```sql
+SELECT MAX(largest_usd)
+FROM (SELECT r.name retion_name, SUM(o.total_amt_usd) largest_usd
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+GROUP BY 1) t1;
+```
+
+
+```sql
+SELECT r.name retion_name, COUNT(total) most_order
+FROM region r
+JOIN sales_reps s
+ON s.region_id = r.id
+JOIN accounts a
+ON a.sales_rep_id = s.id
+JOIN orders o
+ON o.account_id = a.id
+GROUP BY 1
+HAVING SUM(o.total_amt_usd) = 
+    (SELECT MAX(largest_usd)
+    FROM (SELECT r.name retion_name, SUM(o.total_amt_usd) largest_usd
+        FROM region r
+        JOIN sales_reps s
+        ON s.region_id = r.id
+        JOIN accounts a
+        ON a.sales_rep_id = s.id
+        JOIN orders o
+        ON o.account_id = a.id
+        GROUP BY 1) t1);
+```
