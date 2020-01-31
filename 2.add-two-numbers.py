@@ -66,7 +66,7 @@ class Solution(object):
                 curr.next = ListNode(val)
                 carry = 0
             curr = curr.next
-        if carry >0:
+        if carry > 0:
             curr.next = ListNode(1)
         return root.next
 

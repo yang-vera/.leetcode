@@ -58,16 +58,17 @@ class Solution(object):
             if k >= (length//2):
                 return self.max_nolimit(prices, length)
             else:
-                dp = [None]*(k+1)
-                for i in range(k+1):
+                dp = [None]*(2)
+                for i in range(2):
                     dp[i]=[0]*length
                 for i in range(1, k+1):
-                    localmax = dp[i-1][0]-prices[0]
+                    localmax = dp[(i-1)%2][0]-prices[0]
                     for j in range(1, length):
-                        dp[i][j] = max(dp[i][j-1], prices[j]+localmax)
-                        localmax = max(localmax, dp[i-1][j]-prices[j])
+                        localmax = max(localmax, dp[(i-1)%2][j]-prices[j])
+                        dp[i%2][j] = max(dp[i%2][j-1], prices[j]+localmax)
+
                     
-                return dp[k][length-1]
+                return max(dp[0][length-1], dp[1][length-1])
     
     def max_nolimit(self, prices, length):
         profit = 0
