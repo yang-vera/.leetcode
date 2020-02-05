@@ -59,12 +59,53 @@ class Solution(object):
         :rtype: bool
         [1] index 1 position is the required
         """
-        dict_course = {}
-        # key is course index, value is the index of the required
+
         nList = len(prerequisites)
         if nList == 0:
             return True
+        course = dict() # record the key = couse : value = number of prerequisites
+        coursePre = dict() # record the courses that are prerequisites 
+                           # key = pre course: value = child course
         
+        courseTake = set()
+        
+        for Clist in prerequisites:
+            if Clist[0] not in course:
+                course[Clist[0]] =  1
+            else:
+                course[Clist[0]] += 1
+            
+            if Clist[1] not in coursePre:
+                coursePre[Clist[1]] = set([Clist[0]])
+            else:
+                coursePre[Clist[1]].add(Clist[0])
+        
+        for i in range(numCourses):
+            if i not in course:
+                courseTake.add(i)
+        if not courseTake:
+            return False
+        
+        while courseTake:
+            # pop out one course, take it
+            iPre = courseTake.pop()
+            if iPre in coursePre:
+                # it is a prerequestite
+                child = coursePre[iPre] 
+                for iChild in child:
+                    course[iChild]-=1
+                    if course[iChild] == 0:
+                        courseTake.add(iChild)
+        # check if there is any course that has >0 precourse
+        if sum(course.values())>0:
+            return False
+        
+        return True
+
+            
+
+            
+            
 
 
 
