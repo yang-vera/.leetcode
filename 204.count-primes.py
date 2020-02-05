@@ -32,6 +32,19 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        
+        if n<=2:
+            return 0
+        count = 0
+        noprime = set()
+        for i in range(2, n):
+            if i in noprime:
+                continue
+            else:
+                count += 1
+                j = 2
+                while (j*i) < n:
+                    noprime.add(j*i)
+                    j+=1
+        return count
 # @lc code=end
 
