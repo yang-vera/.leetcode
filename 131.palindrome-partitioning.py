@@ -38,6 +38,7 @@ class Solution(object):
         :type s: str
         :rtype: List[List[str]]
         """
+        #分治的思想
         dp = [None]*len(s)
         for i in range(len(s)):
             dp[i] = [None]*len(s)
