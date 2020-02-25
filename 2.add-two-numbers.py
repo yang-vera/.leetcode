@@ -1,4 +1,10 @@
 #
+# @lc app=leetcode id=2 lang=python3
+#
+# [2] Add Two Numbers
+#
+# Definition for singly-linked list.
+# class ListNode:
 # @lc app=leetcode id=2 lang=python
 #
 # [2] Add Two Numbers
@@ -35,6 +41,7 @@
 #         self.val = x
 #         self.next = None
 
+
 class Solution(object):
     def addTwoNumbers(self, l1, l2):
         """
@@ -62,6 +69,4 @@ class Solution(object):
         if carry > 0:
             curr.next = ListNode(1)
         return root.next
-
-        
 
