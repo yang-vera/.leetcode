@@ -49,24 +49,27 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        carry = 0
-        root = curr = ListNode(0)
+        # check if the sum is greater than 9
+        # iterate until one list is empty
+        val = 0
+        cur = head = ListNode(0)
         while l1 or l2:
-            val = carry
             if l1:
-                val+=l1.val
-                l1=l1.next
+                val += l1.val
+                l1 = l1.next
             if l2:
-                val+=l2.val
-                l2=l2.next
-            if val>9:
-                curr.next = ListNode(val%10)
-                carry = 1
+                val += l2.val
+                l2 = l2.next
+            if val > 9:
+                cur.next = ListNode(val%10)
+                cur = cur.next
+                val = 1
             else:
-                curr.next = ListNode(val)
-                carry = 0
-            curr = curr.next
-        if carry > 0:
-            curr.next = ListNode(1)
-        return root.next
+                cur.next = ListNode(val)
+                cur = cur.next
+                val = 0
+        if val == 1:
+            cur.next = ListNode(val)
+        return head.next
+               
 

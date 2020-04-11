@@ -58,19 +58,36 @@ class Solution(object):
         :type numRows: int
         :rtype: str
         """
+        # this is to find the rules 
+        # pay attention to 2nd to (largest-1)th row
+
         sLen = len(s)
-        str = []
-        if sLen<=numRows or numRows<2:
+        if sLen <=numRows or numRows ==1:
             return s
-        lag = 2 * (numRows-1)
+        nCycle = 2*(numRows-1)
+        str_arr = ''
         for i in range(numRows):
-            for j in range(i, sLen, lag):
-                str.append(s[j])
+            for j in range(i, sLen, nCycle):
+                str_arr+=s[j]
                 if i>0 and i<numRows-1:
-                    iExtra = j+lag-2*i
+                    iExtra = j + nCycle - 2*i
                     if iExtra < sLen:
-                        str.append(s[iExtra])
-        return ''.join(str)
+                        str_arr+=s[iExtra]
+        return str_arr
+
+        # sLen = len(s)
+        # str = []
+        # if sLen<=numRows or numRows<2:
+        #     return s
+        # lag = 2 * (numRows-1)
+        # for i in range(numRows):
+        #     for j in range(i, sLen, lag):
+        #         str.append(s[j])
+        #         if i>0 and i<numRows-1:
+        #             iExtra = j+lag-2*i
+        #             if iExtra < sLen:
+        #                 str.append(s[iExtra])
+        # return ''.join(str)
 
 
 

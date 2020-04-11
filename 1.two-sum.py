@@ -36,10 +36,12 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        dict = {}
+        # use dictionary
+        # diff between value and target is the key of the dict
+        num_dict = dict()
         for i in range(len(nums)):
-            if nums[i] not in dict:
-                dict[target-nums[i]] = i
+            if nums[i] not in num_dict:
+                num_dict[target-nums[i]] = i
             else:
-                return [dict[nums[i]], i]
+                return [num_dict[nums[i]], i]
 

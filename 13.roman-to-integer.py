@@ -17,14 +17,7 @@
 # and M.
 # 
 # 
-# Symbol       Value
-# I             1
-# V             5
-# X             10
-# L             50
-# C             100
-# D             500
-# M             1000
+
 # 
 # For example, two is written as II in Roman numeral, just two one's added
 # together. Twelve is written as, XII, which is simply X + II. The number
@@ -85,19 +78,39 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        dict = {'I': 1,
-                'V': 5,
-                'X': 10,
-                'L': 50,
-                'C': 100,
-                'D': 500,
-                'M': 1000}
+        # replace the confused strings with clear ones
         s = s.replace('IV', 'IIII').replace('IX', 'VIIII')
         s = s.replace('XL', 'XXXX').replace('XC', 'LXXXX')
         s = s.replace('CD', 'CCCC').replace('CM', 'DCCCC')
-        value = 0
-        for i in range(len(s)):
-            value += dict[s[i]]
-        return value
+        # Symbol       Value
+        # I             1
+        # V             5
+        # X             10
+        # L             50
+        # C             100
+        # D             500
+        # M             1000
+        value_dict = {
+            'I':1, 'V':5, 'X':10, 'L':50, 'C':100, 'D':500, 'M':1000
+        }
+        result = 0
+        for c in s:
+            result+= value_dict[c]
+        return result
+
+        # dict = {'I': 1,
+        #         'V': 5,
+        #         'X': 10,
+        #         'L': 50,
+        #         'C': 100,
+        #         'D': 500,
+        #         'M': 1000}
+        # s = s.replace('IV', 'IIII').replace('IX', 'VIIII')
+        # s = s.replace('XL', 'XXXX').replace('XC', 'LXXXX')
+        # s = s.replace('CD', 'CCCC').replace('CM', 'DCCCC')
+        # value = 0
+        # for i in range(len(s)):
+        #     value += dict[s[i]]
+        # return value
 
 

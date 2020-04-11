@@ -45,27 +45,38 @@ class Solution(object):
         :rtype: str
         """
         if not strs:
-            return ""
-        max_l = 0
-        different = False
-        i = 0
-        size_str = len(strs)
-        while i < len(strs[0]):
-            char = strs[0][i]
-            for j in range(1, size_str):
-                if i >= len(strs[j]):
-                    different = True
-                    break
-                if strs[j][i] != char:
-                    different = True
-                    break
-            if different:
+            return ''
+        prefixL = 0
+        charList = list(zip(*strs))
+        for oneList in charList: 
+            if len(set(oneList)) > 1:
                 break
-            else:
-                max_l +=1             
-            i+=1
-        if max_l == 0:
-            return ""
-        else:
-            return strs[0][:max_l]
+            prefixL+=1
+        return strs[0][:prefixL]
+        
+
+        # if not strs:
+        #     return ""
+        # max_l = 0
+        # different = False
+        # i = 0
+        # size_str = len(strs)
+        # while i < len(strs[0]):
+        #     char = strs[0][i]
+        #     for j in range(1, size_str):
+        #         if i >= len(strs[j]):
+        #             different = True
+        #             break
+        #         if strs[j][i] != char:
+        #             different = True
+        #             break
+        #     if different:
+        #         break
+        #     else:
+        #         max_l +=1             
+        #     i+=1
+        # if max_l == 0:
+        #     return ""
+        # else:
+        #     return strs[0][:max_l]
         

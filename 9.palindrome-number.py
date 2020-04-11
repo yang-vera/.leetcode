@@ -51,17 +51,31 @@ class Solution(object):
         :type x: int
         :rtype: bool
         """
-        origin_x = x
-        reverse = 0
-        if x<0:
+        # get the reverse and then compare
+        true_value = x
+        if x < 0:
             return False
-        else:
-            while x:
-                reverse = 10*reverse+x%10
-                x=x//10
-        if reverse == origin_x:
+        reverse = 0
+        while x:
+            reverse = 10*reverse+x%10
+            x = x//10
+        if reverse == true_value:
             return True
         else:
             return False
+
+
+        # origin_x = x
+        # reverse = 0
+        # if x<0:
+        #     return False
+        # else:
+        #     while x:
+        #         reverse = 10*reverse+x%10
+        #         x=x//10
+        # if reverse == origin_x:
+        #     return True
+        # else:
+        #     return False
         
 

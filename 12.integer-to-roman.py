@@ -85,48 +85,24 @@ class Solution(object):
         :type num: int
         :rtype: str
         """
-        str = []
-        num_M = num // 1000
-        str.append('M'*num_M)
-        num -= 1000 * num_M
-        if num >= 900:
-            str.append('CM')
-            num -= 900
-        elif num >= 500:
-            str.append('D')
-            num -= 500
-        elif num >= 400:
-            str.append('CD')
-            num -= 400
-        
-        num_C = num // 100
-        str.append('C'*num_C)
-        num -= 100 * num_C
-        
-        if num >= 90:
-            str.append('XC')
-            num -= 90
-        elif num >= 50:
-            str.append('L')
-            num -= 50
-        if num >= 40:
-            str.append('XL')
-            num -=40
-        num_X = num // 10
-        str.append('X'*num_X)
-        num -= 10 * num_X
-        
-        if num == 9:
-            str.append('IX')
-            return ''.join(str)
-        if num == 4:
-            str.append('IV')
-            return ''.join(str)
-        if num >= 5:
-            str.append('V')
-            num -= 5
-        str.append('I'*num)
-        return ''.join(str)
-        
-        
+# Symbol       Value
+# I             1
+# V             5
+# X             10
+# L             50
+# C             100
+# D             500
+# M             1000  
+# I can be placed before V (5) and X (10) to make 4 and 9. 
+# X can be placed before L (50) and C (100) to make 40 and 90. 
+# C can be placed before D (500) and M (1000) to make 400 and 900.      
+        Roman_arr = ['I', 'IV', 'V', 'IX', 'X', 'XL', 'L', 'XC', 'C', 'CD', 'D', 'CM', 'M']
+        num_arr = [1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000]
+        result = ''
+        i = len(num_arr)-1
+        while i>=0:
+            result+= (num//num_arr[i])*Roman_arr[i]
+            num %= num_arr[i]
+            i-=1
+        return result
 

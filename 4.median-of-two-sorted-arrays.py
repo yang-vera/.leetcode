@@ -46,31 +46,61 @@ class Solution(object):
         :type nums2: List[int]
         :rtype: float
         """
-        tot_len = len(nums1) + len(nums2)
-        K = tot_len // 2
-        if tot_len % 2 == 0:
-            return 0.5*(self.findKthlargest(nums1, nums2,K-1)+self.findKthlargest(nums1, nums2, K))
+        # divide and conqur
+        # do not forget the situation that one list is empty in the recursion
+        total_len = len(nums1) + len(nums2)
+        if total_len % 2 == 1:
+            return self.getidxlarge(nums1, nums2, total_len//2) 
         else:
-            return self.findKthlargest(nums1, nums2,K)
-    
-    def findKthlargest(self, nums1, nums2, K):
+            return 0.5*self.getidxlarge(nums1, nums2, total_len//2-1) + 0.5*self.getidxlarge(nums1, nums2, total_len//2) 
+
+
+    def getidxlarge(self, nums1, nums2, idx):
         if not nums1:
-            return nums2[K]
+            return nums2[idx]
         if not nums2:
-            return nums1[K]
+            return nums1[idx]
         iMid_1 = len(nums1)//2
         iMid_2 = len(nums2)//2
-        Mid_1 = nums1[iMid_1]
-        Mid_2 = nums2[iMid_2]
-        if iMid_1+iMid_2 >= K:
-            if Mid_1 > Mid_2:
-                return self.findKthlargest(nums1[:iMid_1], nums2, K)
+        mid_1 = nums1[iMid_1]
+        mid_2 = nums2[iMid_2]
+        if (iMid_1+iMid_2) >= idx:
+            if mid_1 > mid_2:
+                return self.getidxlarge(nums1[:iMid_1], nums2, idx)
             else:
-                return self.findKthlargest(nums1, nums2[:iMid_2], K)
+                return self.getidxlarge(nums1, nums2[:iMid_2], idx)
         else:
-            if Mid_1 > Mid_2:
-                return self.findKthlargest(nums1, nums2[iMid_2+1:], K-iMid_2-1)
+            if mid_1 > mid_2:
+                return self.getidxlarge(nums1, nums2[iMid_2+1:], idx-iMid_2-1)
             else:
-                return self.findKthlargest(nums1[iMid_1+1:], nums2, K-iMid_1-1)
+                return self.getidxlarge(nums1[iMid_1+1:], nums2, idx-iMid_1-1)
+
+
+    #     tot_len = len(nums1) + len(nums2)
+    #     K = tot_len // 2
+    #     if tot_len % 2 == 0:
+    #         return 0.5*(self.findKthlargest(nums1, nums2,K-1)+self.findKthlargest(nums1, nums2, K))
+    #     else:
+    #         return self.findKthlargest(nums1, nums2,K)
+    
+    # def findKthlargest(self, nums1, nums2, K):
+    #     if not nums1:
+    #         return nums2[K]
+    #     if not nums2:
+    #         return nums1[K]
+    #     iMid_1 = len(nums1)//2
+    #     iMid_2 = len(nums2)//2
+    #     Mid_1 = nums1[iMid_1]
+    #     Mid_2 = nums2[iMid_2]
+    #     if iMid_1+iMid_2 >= K:
+    #         if Mid_1 > Mid_2:
+    #             return self.findKthlargest(nums1[:iMid_1], nums2, K)
+    #         else:
+    #             return self.findKthlargest(nums1, nums2[:iMid_2], K)
+    #     else:
+    #         if Mid_1 > Mid_2:
+    #             return self.findKthlargest(nums1, nums2[iMid_2+1:], K-iMid_2-1)
+    #         else:
+    #             return self.findKthlargest(nums1[iMid_1+1:], nums2, K-iMid_1-1)
         
 
