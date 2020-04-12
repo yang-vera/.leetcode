@@ -39,17 +39,32 @@ class Solution(object):
         :type head: ListNode
         :rtype: ListNode
         """
+
+        #exchange cur.next and cur.next.next
         dummy = ListNode(0)
         dummy.next = head
-        curr = dummy
-        # change a b, assign the part before a and the part after b
-        while curr.next and curr.next.next:
-            a = curr.next
-            b = curr.next.next
+        cur = dummy
+        while cur.next and cur.next.next:
+            a = cur.next
+            b = cur.next.next
             a.next = b.next
             b.next = a
-            curr.next = b
-            curr = a # this is necessary update curr
+            cur.next = b
+            cur = a
         return dummy.next
+
+
+        # dummy = ListNode(0)
+        # dummy.next = head
+        # curr = dummy
+        # # change a b, assign the part before a and the part after b
+        # while curr.next and curr.next.next:
+        #     a = curr.next
+        #     b = curr.next.next
+        #     a.next = b.next
+        #     b.next = a
+        #     curr.next = b
+        #     curr = a # this is necessary update curr
+        # return dummy.next
 
 

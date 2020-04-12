@@ -69,13 +69,27 @@ class Solution(object):
         """
         table = {')':'(', ']':'[', '}':'{'}
         arr = []
-        for char in s:
-            if char in table:
+        for c in s:
+            if c in table:
                 if not arr:
                     return False
-                else:
-                    if arr.pop()!=table[char]:
-                        return False
+                if arr.pop()!=table[c]:
+                    return False
             else:
-                arr.append(char)
-        return (not arr)
+                arr.append(c)
+        return (not arr) 
+
+
+
+        # table = {')':'(', ']':'[', '}':'{'}
+        # arr = []
+        # for char in s:
+        #     if char in table:
+        #         if not arr:
+        #             return False
+        #         else:
+        #             if arr.pop()!=table[char]:
+        #                 return False
+        #     else:
+        #         arr.append(char)
+        # return (not arr)

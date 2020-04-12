@@ -36,19 +36,36 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        pos = dummyhead =ListNode(0)
+        cur = dummyhead = ListNode(0)
         while l1 and l2:
-            if l1.val <= l2.val:
-                pos.next = l1
-                l1=l1.next
+            if l1.val >=l2.val:
+                cur.next = l2
+                l2=l2.next
             else:
-                pos.next = l2
-                l2 = l2.next
-            pos=pos.next
+                cur.next = l1
+                l1 = l1.next
+            cur = cur.next
         if l1:
-            pos.next = l1
+            cur.next = l1
         else:
-            pos.next = l2
+            cur.next = l2
         return dummyhead.next
+
+
+
+        # pos = dummyhead =ListNode(0)
+        # while l1 and l2:
+        #     if l1.val <= l2.val:
+        #         pos.next = l1
+        #         l1=l1.next
+        #     else:
+        #         pos.next = l2
+        #         l2 = l2.next
+        #     pos=pos.next
+        # if l1:
+        #     pos.next = l1
+        # else:
+        #     pos.next = l2
+        # return dummyhead.next
         
 

@@ -41,32 +41,62 @@ class Solution(object):
         :type nums: List[int]
         :type target: int
         :rtype: List[List[int]]
-        """
+        # """
+
         nums.sort()
         result = []
-        for i in range (len(nums)-3):
+        for i in range(len(nums)-3):
             if i > 0 and nums[i]==nums[i-1]:
                 continue
-            if (nums[i]+nums[i+1]+nums[i+2]+nums[i+3]) > target:
-                return result
+            if sum(nums[i:i+4])> target:
+                break
+            target_3 = target - nums[i]
             for j in range(i+1, len(nums)-2):
-                if j > i+1 and nums[j]==nums[j-1]:
+                if j>i+1 and nums[j]==nums[j-1]:
                     continue
-                k,l = j+1, len(nums)-1
-                sum_target = target - nums[i] - nums[j]
-                while k < l:
-                    sum = nums[k] + nums[l]
-                    if sum == sum_target:
-                        result.append([nums[i],nums[j],nums[k],nums[l]])
-                    if sum < sum_target:
-                        k += 1
-                        while k < l and nums[k] == nums[k-1]:
-                            k += 1
+                if sum(nums[j:j+3])>target_3:
+                    break
+                left, right = j+1, len(nums)-1
+                while left < right:
+                    if nums[left]+nums[right] < target_3 - nums[j]:
+                        left+=1
+                    elif nums[left]+nums[right] > target_3 - nums[j]:
+                        right-=1
                     else:
-                        l -= 1
-                        while k < l and nums[l] == nums[l+1]:
-                            l -= 1
+                        result.append([nums[i], nums[j], nums[left], nums[right]])
+                        left+=1
+                        right-=1
+                        while left < right and nums[left] == nums[left-1]:
+                            left+=1
+                        while left < right and nums[right] == nums[right+1]:
+                            right-=1   
         return result
+
+        # nums.sort()
+        # result = []
+        # for i in range (len(nums)-3):
+        #     if i > 0 and nums[i]==nums[i-1]:
+        #         continue
+        #     if (nums[i]+nums[i+1]+nums[i+2]+nums[i+3]) > target:
+        #         return result
+        #     for j in range(i+1, len(nums)-2):
+        #         if j > i+1 and nums[j]==nums[j-1]:
+        #             continue
+        #         k,l = j+1, len(nums)-1
+        #         sum_target = target - nums[i] - nums[j]
+        #         while k < l:
+        #             sum = nums[k] + nums[l]
+        #             if sum == sum_target:
+        #                 result.append([nums[i],nums[j],nums[k],nums[l]])
+        #             if sum < sum_target:
+        #                 k += 1
+        #                 while k < l and nums[k] == nums[k-1]:
+        #                     k += 1
+        #             else:
+        #                 l -= 1
+        #                 while k < l and nums[l] == nums[l+1]:
+        #                     l -= 1
+        # return result
 
                 
 

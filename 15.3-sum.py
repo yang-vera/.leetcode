@@ -45,7 +45,7 @@ class Solution(object):
         res = []
         target = 0
         for i in range(len(nums)-2):
-            if nums[i] > 0:
+            if nums[i] +nums[i+1]+nums[i+2] > 0:
                 break
             if i > 0 and nums[i]==nums[i-1]:
                 continue

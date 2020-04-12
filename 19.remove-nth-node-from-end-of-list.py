@@ -47,15 +47,31 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        slow = fast = head
-        for i in range(n):
-            fast=fast.next
-        # assuming n is always valid so n is at most length of list
-        if not fast:
+        # fast and slow pointers
+        # at least the list has n nodes
+        fast = slow = head
+        for _ in range(n):
+            fast = fast.next
+        # if fast is None, the first node needs to be deleted
+        if fast is None:
             return head.next
-        while fast.next:
+        while fast.next is not None:
             fast = fast.next
             slow = slow.next
-        slow.next=slow.next.next
+        slow.next = slow.next.next
         return head
+
+
+
+        # slow = fast = head
+        # for i in range(n):
+        #     fast=fast.next
+        # # assuming n is always valid so n is at most length of list
+        # if not fast:
+        #     return head.next
+        # while fast.next:
+        #     fast = fast.next
+        #     slow = slow.next
+        # slow.next=slow.next.next
+        # return head
 

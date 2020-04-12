@@ -53,20 +53,42 @@ class Solution(object):
         """
         # every time multiply temporary divisor by two
         # if dividend < divisor, set temporary divisor to be the original one
+        
         if dividend == 0:
             return 0
-        isPositive = (dividend < 0) == (divisor < 0)
+        isNegative = not ( (dividend <0) == (divisor <0))
         dividend, divisor = abs(dividend), abs(divisor)
         res = 0
-        while dividend >= divisor:
+        while dividend >=divisor:
             temp = divisor
             i = 1
             while dividend >= temp:
-                dividend -= temp
                 res+=i
-                i<<=1 # x <<y : x = x*2^y zy: <<= update i
+                dividend -= temp
                 temp<<=1
-        if not isPositive:
+                i<<=1
+        if isNegative:
             res = -res
-        return min(max(-2147483648,res), 2147483647)
+        limit = 2**31
+        return min(max(-limit, res), limit-1)
+
+        
+        
+        
+        # if dividend == 0:
+        #     return 0
+        # isPositive = (dividend < 0) == (divisor < 0)
+        # dividend, divisor = abs(dividend), abs(divisor)
+        # res = 0
+        # while dividend >= divisor:
+        #     temp = divisor
+        #     i = 1
+        #     while dividend >= temp:
+        #         dividend -= temp
+        #         res+=i
+        #         i<<=1 # x <<=y : x = x*2^y zy: <<= update i
+        #         temp<<=1
+        # if not isPositive:
+        #     res = -res
+        # return min(max(-2147483648,res), 2147483647)
 

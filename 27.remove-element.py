@@ -73,13 +73,24 @@ class Solution(object):
         :type val: int
         :rtype: int
         """
-        new_i = 0
-        for i in range(len(nums)):
-            if nums[i] == val:
+
+        slow = 0
+        for num in nums:
+            if num == val:
                 continue
             else:
-                nums[new_i]=nums[i]
-                new_i+=1
-        return new_i
+                nums[slow] = num
+                slow+=1
+        return slow
+
+
+        # new_i = 0
+        # for i in range(len(nums)):
+        #     if nums[i] == val:
+        #         continue
+        #     else:
+        #         nums[new_i]=nums[i]
+        #         new_i+=1
+        # return new_i
         
 
