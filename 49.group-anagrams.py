@@ -42,16 +42,26 @@ class Solution(object):
         :type strs: List[str]
         :rtype: List[List[str]]
         """
+        # sort string as a key in the dictionary
         visit = {}
         for string in strs:
-            s_list = list(string)
-            s_list.sort()
-            s_string = ''.join(s_list)
-            if s_string not in visit:
-                visit[s_string] = [string]
+            key_str = ''.join(sorted(string))
+            if key_str not in visit:
+                visit[key_str] = [string]
             else:
-                visit[s_string].append(string)
+                visit[key_str].append(string)
         return list(visit.values())
+
+        # visit = {}
+        # for string in strs:
+        #     s_list = list(string)
+        #     s_list.sort()
+        #     s_string = ''.join(s_list)
+        #     if s_string not in visit:
+        #         visit[s_string] = [string]
+        #     else:
+        #         visit[s_string].append(string)
+        # return list(visit.values())
     
 
 # @lc code=end

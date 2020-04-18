@@ -46,26 +46,28 @@ class Solution(object):
         :type nums: List[int]
         :rtype: bool
         """
-        last_index = len(nums)-1
+        
+        # find the current maximum range and then find 
+        # 0 element; if maximum is beyond the 0, then skip
+        # if not return False
+        # pay attention to the last element:
+        # no need to let the current max be greater than last index
+        # just let he current max be equal or greater than last index
         if len(nums)<=1:
             return True
-        '''    
-        last_index = len(nums)-1
-        for i in range(len(nums)-2, -1, -1):
-            if nums[i]+i >=last_index:
-                last_index = i
+        stepMax = nums[0]
         
-        if last_index == 0:
+        for i in range(len(nums)-1):
+            if nums[i] == 0:
+                if stepMax <= i:
+                    return False
+                else:
+                    continue
+            else:
+                stepMax = max(i+nums[i], stepMax)
+        if stepMax >= len(nums)-1:
             return True
         else:
             return False
-        '''
-        max_step = 0
-        for i in range(len(nums)-1):
-            if nums[i]==0 and max_step<=i:
-                return False
-            max_step = max(max_step, nums[i]+i)
-        return True
-
 
 

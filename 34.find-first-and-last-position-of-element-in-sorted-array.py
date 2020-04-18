@@ -40,29 +40,49 @@ class Solution(object):
         :type target: int
         :rtype: List[int]
         """
-        left, right = 0, len(nums)-1
         # 找左边界 相等也要 right = mid-1 最后左边界是有效的left
         # 找右边界 相等也要往右 left = mid+1 最后右边界是right
-
-        while left<=right:
+        
+        left, right = 0, len(nums)-1
+        while left <=right:
             mid = (left+right)//2
-            if nums[mid]<target:
+            if nums[mid] >= target:
+                right = mid-1
+            else:
+                left = mid + 1
+        if left == len(nums) or nums[left] != target:
+            return [-1, -1]
+        left_margin = left
+        right = len(nums)-1
+        while left <= right:
+            mid = (left+right)//2
+            if nums[mid] <= target:
                 left = mid+1
             else:
                 right = mid-1
-        # 是否有效
-        if left == len(nums) or nums[left]!=target:
-            return [-1, -1]
-        right = len(nums)-1
-        res = [None]*2
-        res[0] = left
-        while left<=right:
-            mid = (left+right)//2
-            if nums[mid]>target:
-                right = mid-1
-            else:
-                left = mid +1
-        res[1]=right
-        return res
+        return [left_margin, right]
+        
+        
+        #left, right = 0, len(nums)-1
+        # while left<=right:
+        #     mid = (left+right)//2
+        #     if nums[mid]<target:
+        #         left = mid+1
+        #     else:
+        #         right = mid-1
+        # # 是否有效
+        # if left == len(nums) or nums[left]!=target:
+        #     return [-1, -1]
+        # right = len(nums)-1
+        # res = [None]*2
+        # res[0] = left
+        # while left<=right:
+        #     mid = (left+right)//2
+        #     if nums[mid]>target:
+        #         right = mid-1
+        #     else:
+        #         left = mid +1
+        # res[1]=right
+        # return res
 
     

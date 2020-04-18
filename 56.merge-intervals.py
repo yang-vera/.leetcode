@@ -43,19 +43,36 @@ class Solution(object):
         :type intervals: List[List[int]]
         :rtype: List[List[int]]
         """
+
+        # first sort and then merge 
         if len(intervals)<=1:
             return intervals
         intervals.sort(key = lambda x:x[0])
-        i = 1
-        while 1:
-            if intervals[i][0] <= intervals[i-1][1]:
-                if intervals[i][1]>intervals[i-1][1]:
-                    intervals[i-1][1] = intervals[i][1]
-                del intervals[i]
+        result = [intervals[0]]
+        for i in range(1, len(intervals)):
+            if intervals[i][0] <= result[-1][1]:
+                if result[-1][1]<=intervals[i][1]:
+                    result[-1][1] = intervals[i][1]
             else:
-                i+=1
-            if i == len(intervals):
-                return intervals
+                result.append(intervals[i])
+        return result
+    
+
+
+
+        # if len(intervals)<=1:
+        #     return intervals
+        # intervals.sort(key = lambda x:x[0])
+        # i = 1
+        # while 1:
+        #     if intervals[i][0] <= intervals[i-1][1]:
+        #         if intervals[i][1]>intervals[i-1][1]:
+        #             intervals[i-1][1] = intervals[i][1]
+        #         del intervals[i]
+        #     else:
+        #         i+=1
+        #     if i == len(intervals):
+        #         return intervals
 
 
 

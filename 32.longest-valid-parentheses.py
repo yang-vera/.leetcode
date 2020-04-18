@@ -40,30 +40,61 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
+
+        #dp: dp[i] is the max length that ends with the i-th character
+        # if dp[i] == '(' then dp[i]=0
+        # if dp[i] == ')' then check dp[i-1] seperate the two situations that 
+        # dp[i-1] is '(' or ')'
         if not s:
             return 0
-        dp = [0]*len(s)
-        for i in range(1, len(s)):
+        len_dp = [0]*len(s)
+        if s[0:2] == '()':
+            len_dp[1]=2
+        for i in range(2, len(s)):
             if s[i]=='(':
                 continue
             else:
                 if s[i-1]=='(':
-                    if i-2>=0:
-                        dp[i]=dp[i-2]+2
-                    else:
-                        dp[i]=2
+                    len_dp[i] = len_dp[i-2] + 2
                 else:
-                    start = i -dp[i-1]-1
-                    if start < 0:
-                        continue
-                    if s[start] == ')':
+                    # s[i-1] is ')' and s[i] is also ')'
+                    start = i- len_dp[i-1] -1
+                    if start < 0 or s[start]==')':
                         continue
                     else:
-                        if start -1 >=0:
-                            dp[i]=dp[i-1]+dp[start-1]+2
+                        if start - 1 >= 0:
+                            len_dp[i] = len_dp[i-1] + len_dp[start-1]+2
                         else:
-                            dp[i]=dp[i-1]+2
-        return max(dp)
+                            len_dp[i] = len_dp[i-1] + 2
+
+        return max(len_dp)
+        
+
+
+        # if not s:
+        #     return 0
+        # dp = [0]*len(s)
+        # for i in range(1, len(s)):
+        #     if s[i]=='(':
+        #         continue
+        #     else:
+        #         if s[i-1]=='(':
+        #             if i-2>=0:
+        #                 dp[i]=dp[i-2]+2
+        #             else:
+        #                 dp[i]=2
+        #         else:
+        #             start = i -dp[i-1]-1
+        #             if start < 0:
+        #                 continue
+        #             if s[start] == ')':
+        #                 continue
+        #             else:
+        #                 if start -1 >=0:
+        #                     dp[i]=dp[i-1]+dp[start-1]+2
+        #                 else:
+        #                     dp[i]=dp[i-1]+2
+        # return max(dp)
 
         
         

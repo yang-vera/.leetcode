@@ -36,15 +36,30 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        numsL = len(nums)
-        if numsL==1:
-            return nums[0]
-        cur_max = nums[0] # it is the largest sum of subarray that ends at i (including i)
-        all_max = nums[0] # it is the largest sum of subarray till i (no need to include i)
-        for i in range(1, numsL):
-            cur_max = max(cur_max+nums[i], nums[i])
-            all_max = max(cur_max, all_max)
-        return all_max
+
+
+        # dynamic programming
+        maxCur = nums[0]
+        maxAll = nums[0]
+        for i in range(1, len(nums)):
+            if maxCur<=0:
+                maxCur = nums[i]
+            else:
+                maxCur += nums[i]
+            maxAll = max(maxAll, maxCur)
+        return maxAll
+
+
+
+        # numsL = len(nums)
+        # if numsL==1:
+        #     return nums[0]
+        # cur_max = nums[0] # it is the largest sum of subarray that ends at i (including i)
+        # all_max = nums[0] # it is the largest sum of subarray till i (no need to include i)
+        # for i in range(1, numsL):
+        #     cur_max = max(cur_max+nums[i], nums[i])
+        #     all_max = max(cur_max, all_max)
+        # return all_max
 
         
 

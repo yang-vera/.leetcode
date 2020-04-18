@@ -99,14 +99,30 @@ class Solution(object):
                 c = board[i][j]
                 if c=='.':
                     continue
-                str_row = '('+str(i)+')'+c
-                str_col = c+'('+str(j)+')'
-                str_sq = '('+str(i//3)+')' + '('+str(j//3)+')' + c
-                if (str_row in visit) or (str_col in visit) or (str_sq in visit):
+                str_row = '(' + str(i) + ')' + c
+                str_col = c+ '(' + str(j) + ')'
+                str_square = '(' + str(i//3) + ')' + '(' + str(j//3) + ')' +c
+                if (str_row in visit) or (str_col in visit) or (str_square in visit):
                     return False
-                else:
-                    visit.update({str_row,str_col,str_sq}) 
+                visit.update({str_row, str_col, str_square})
         return True
+        
+        
+        
+        # visit = set()
+        # for i in range(9):
+        #     for j in range(9):
+        #         c = board[i][j]
+        #         if c=='.':
+        #             continue
+        #         str_row = '('+str(i)+')'+c
+        #         str_col = c+'('+str(j)+')'
+        #         str_sq = '('+str(i//3)+')' + '('+str(j//3)+')' + c
+        #         if (str_row in visit) or (str_col in visit) or (str_sq in visit):
+        #             return False
+        #         else:
+        #             visit.update({str_row,str_col,str_sq}) 
+        # return True
 
         
 
