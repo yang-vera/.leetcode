@@ -39,18 +39,31 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        word_start = 0
+        s = s.rstrip()
+        if not s:
+            return 0
         count = 0
-        for i in range(len(s)-1,-1,-1):
-            if s[i] == ' ':
-                if not word_start:
-                    continue
-                else:
-                    return count
-            else:
-                word_start=1
+        loc = len(s)-1
+        while loc >= 0:
+            if s[loc]!=' ':
                 count+=1
+                loc-=1
+            else:
+                return count
         return count
+
+        # word_start = 0
+        # count = 0
+        # for i in range(len(s)-1,-1,-1):
+        #     if s[i] == ' ':
+        #         if not word_start:
+        #             continue
+        #         else:
+        #             return count
+        #     else:
+        #         word_start=1
+        #         count+=1
+        # return count
         
 # @lc code=end
 

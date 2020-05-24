@@ -10,9 +10,8 @@ class Solution:
         '''
         if m==1 or n==1:
             return 1
-        dp = [1]*m
-        for i in range(1,n):
-            for j in range(1,m):
-                dp[j]=dp[j]+dp[j-1]
-        return dp[-1]
-
+        step_dp = [1 for _ in range(m)]
+        for _ in range(1, n):
+            for i in range(1,m):
+                step_dp[i] += step_dp[i-1]
+        return step_dp[m-1]

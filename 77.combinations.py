@@ -59,9 +59,9 @@ class Solution(object):
             return
 
         for i in range(start,n+1):
-                rec_res.append(i)
-                self.generateRes(n, k, i+1, res, rec_res)
-                rec_res.pop() 
-        
+            rec_res.append(i)
+            self.generateRes(n, k, i+1, res, rec_res)
+            rec_res.pop() 
+    
 # @lc code=end
 

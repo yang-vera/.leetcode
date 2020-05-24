@@ -48,7 +48,7 @@ class Solution(object):
 
     def getsubset(self, nums, index, path, res):
         if index == len(nums):
-            res.append(path[:])
+            res.append(list(path))
             return
         #not include nums[index]
         self.getsubset(nums, index+1, path, res)

@@ -37,17 +37,14 @@ class Solution(object):
         :rtype: int
         """
 
-
-        # dynamic programming
-        maxCur = nums[0]
-        maxAll = nums[0]
-        for i in range(1, len(nums)):
-            if maxCur<=0:
-                maxCur = nums[i]
+        cur_max = all_max = nums[0]
+        for i in range(1,len(nums)):
+            if cur_max < 0:
+                cur_max = nums[i]
             else:
-                maxCur += nums[i]
-            maxAll = max(maxAll, maxCur)
-        return maxAll
+                cur_max += nums[i]
+            all_max = max(cur_max, all_max)
+        return all_max
 
 
 

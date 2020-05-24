@@ -53,31 +53,25 @@ class Solution(object):
         :type k: int
         :rtype: ListNode
         """
-        #检验是否有东西
         if not head or k == 0:
             return head
-        onenode = tail = head
-        i = 0
-        while onenode:
-            i+=1
-            if not onenode.next:
-                tail = onenode
-            onenode=onenode.next
-        # tail node is found length of the list is known
-        # find which node to be rotated
-        nodeL = i
-        #余数 找一个例子比较即可
-        index = k % nodeL
-        if index == 0:
+        nodeL = 0 # the length of the ListNode
+        tail = cur = head
+        while cur:
+            nodeL+=1
+            if not cur.next:
+                tail = cur 
+            cur = cur.next
+        rotate_idx = k%nodeL
+        if rotate_idx == 0:
+            # no need to have any operations
             return head
-        onenode = head
-        for i in range(0,nodeL-index-1): 
-            onenode=onenode.next
-
+        rotate_node = head
+        for _ in range(nodeL-rotate_idx-1):
+            rotate_node = rotate_node.next
         tail.next = head
-        head = onenode.next 
-        onenode.next = None
+        head = rotate_node.next
+        rotate_node.next = None
         return head
-
 # @lc code=end
 

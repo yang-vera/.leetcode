@@ -58,23 +58,49 @@ class Solution(object):
             return 1
         if x == 1:
             return 1
-        if x ==-1:
-            if n%2 == 0:
-                return 1 
+        if x==-1:
+            if n%2==0:
+                return 1
             else:
                 return -1
-        if n < 0:
-            return 1/self.rec_pow(x, -n)
+        isNegative = (n < 0)
+        if isNegative:
+            n = -n
+        ret = 1
+        while n > 0:
+            if n%2 == 0:
+                x = x*x 
+                n = n//2
+            else:
+                ret *= x
+                n -= 1
+        if isNegative:
+            return 1/ret
         else:
-            return self.rec_pow(x, n)
+            return ret
+
+
+    #     if n == 0:
+    #         return 1
+    #     if x == 1:
+    #         return 1
+    #     if x ==-1:
+    #         if n%2 == 0:
+    #             return 1 
+    #         else:
+    #             return -1
+    #     if n < 0:
+    #         return 1/self.rec_pow(x, -n)
+    #     else:
+    #         return self.rec_pow(x, n)
         
-    def rec_pow(self, x, n):
-        if n == 0:
-            return 1
-        if n%2==0:
-            return self.rec_pow(x*x, n//2)
-        else:
-            return x*self.rec_pow(x*x, n//2)
+    # def rec_pow(self, x, n):
+    #     if n == 0:
+    #         return 1
+    #     if n%2==0:
+    #         return self.rec_pow(x*x, n//2)
+    #     else:
+    #         return x*self.rec_pow(x*x, n//2)
 
 
     #     res = 0

@@ -44,14 +44,16 @@ class Solution(object):
         :type digits: List[int]
         :rtype: List[int]
         """
-        for i in range(len(digits)-1,-1,-1):
+        # find a value that is less than or equal to 8 then done!
+        for i in range(len(digits)-1, -1, -1):
             if digits[i]<=8:
                 digits[i]+=1
                 return digits
             else:
                 digits[i]=0
+        # no leading 0
         if digits[0] == 0:
-            digits.insert(0,1)
-        return digits
+            return ([1]+digits)
+
         
 

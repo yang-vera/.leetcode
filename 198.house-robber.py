@@ -58,12 +58,12 @@ class Solution(object):
         """
         if not nums:
             return 0
-        pre = 0
-        cur = nums[0]
-        res = cur
-        for i in range(1, len(nums)):      
-            res = max(pre+nums[i], cur)
-            pre, cur = cur, res
+        ret_lag2 = 0
+        ret_lag1 = nums[0]
+        res = nums[0]
+        for i in range(1, len(nums)):
+            res = max(ret_lag2+nums[i], ret_lag1)
+            ret_lag2, ret_lag1 = ret_lag1, res
         return res
 
         

@@ -38,18 +38,20 @@ class Solution(object):
         :type grid: List[List[int]]
         :rtype: int
         """
-        n_r = len(grid)
-        n_l = len(grid[0])
-        if n_r == 1 or n_l==1:
-            nstep = sum([sum(num_ar) for num_ar in zip(*grid)])
-            return nstep
-        for i in range(1, n_r):
-            grid[i][0]+=grid[i-1][0]
-        for i in range(1, n_l):
-            grid[0][i]+=grid[0][i-1]
-        for i in range(1,n_l):
-            for j in range(1, n_r):
-                grid[j][i]+=min(grid[j][i-1], grid[j-1][i])
-        return grid[n_r-1][n_l-1]
+        nRow = len(grid)
+        nCol = len(grid[0])
+        if nRow == 1 or nCol == 1:
+            return sum([sum(oneList) for oneList in zip(*grid)])
+        step_dp = [None] * nRow
+        step_dp[0] = grid[0][0]
+        for i in range(1, nRow):
+            step_dp[i] = grid[i][0] + step_dp[i-1]
+        for j in range(1, nCol):
+            for i in range(nRow):
+                if i==0:
+                    step_dp[i]+=grid[i][j]
+                else:
+                    step_dp[i] = min(step_dp[i-1], step_dp[i])+grid[i][j]
+        return step_dp[-1]
 
 
