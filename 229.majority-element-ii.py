@@ -39,6 +39,38 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[int]
         """
+        if not nums:
+            return []
+        count1, count2, group1, group2 = 0,0,0,1
+        for value in nums:
+            if value == group1:
+                count1+=1
+            elif value == group2:
+                count2+=1
+            elif count1 == 0:
+                group1 = value
+                count1 = 1
+            elif count2 == 0:
+                group2 = value
+                count2 = 1
+            else:
+                count1-=1
+                count2-=1
+        
+        count1, count2 = 0, 0
+        for value in nums:
+            if value == group1:
+                count1+=1
+            elif value == group2:
+                count2+=1
+        length = len(nums)
+        res = []
+        if count1 > length//3:
+            res.append(group1)
+        if count2 > length//3:
+            res.append(group2)
+        return res
+        
         
 # @lc code=end
 
